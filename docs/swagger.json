@@ -1,0 +1,1112 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "An E-commerce app with gin framework",
+        "title": "Golang gin for E-commerce",
+        "contact": {
+            "email": "lawalafeez820@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "description": "Greet",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Default"
+                ],
+                "summary": "Welcome page",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/admin/": {
+            "get": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Get all employee",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "GetAllAdmin",
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.AdminsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Error: No admin yet",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Error: Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/add": {
+            "get": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Add new employee",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "MakeUserAdmin",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Query Parameters",
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Success"
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Email not exit",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "409": {
+                        "description": "Error: Invalid email format",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/remove": {
+            "get": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Remove employee",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "RemoveAsAdmin",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Query Parameters",
+                        "name": "email",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Success"
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Invalid email format",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Email not exit",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Get a particular employee",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "GetAnAdmin",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Path Parameters",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.AdminResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Invalid id",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not an admin or no user with the specified id",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Login user with email and password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login user",
+                "parameters": [
+                    {
+                        "description": "Login Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.LoginInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.TokenType"
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "409": {
+                        "description": "Errror: Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/product": {
+            "get": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Get all Product",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "GetAllProduct",
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.AdminsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Error: No Product yet",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Error: Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Create New Poduct",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Create Poduct",
+                "parameters": [
+                    {
+                        "description": "ProductResuest",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.ProductInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Success"
+                        }
+                    },
+                    "400": {
+                        "description": "Errror: Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Error: Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/product/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Get a particular product",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "GetProduct",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Path Parameters",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.AdminResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Invalid id",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not an admin or no user with the specified id",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Update a particular product",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "UpdateProduct",
+                "parameters": [
+                    {
+                        "description": "Update Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.UpdateProduct"
+                        }
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Path Parameters",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.ResponseProduct"
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Invalid id",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not an admin or no user with the specified id",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Delete Product",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "DeleteProduct",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Error: User Doesn't Exist",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/user": {
+            "get": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Get all User",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "GetAllAll",
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.NormalUsersOUt"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Error: No User yet",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "500": {
+                        "description": "Error: Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "User update his/her account",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "UpdateUser",
+                "parameters": [
+                    {
+                        "description": "Update Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.UserUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.NormalUserOUt"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Register a new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Register a new user",
+                "parameters": [
+                    {
+                        "description": "Registration Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.RegisterInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User registered successfully",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Success"
+                        }
+                    },
+                    "400": {
+                        "description": "Errror: Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "409": {
+                        "description": "Errror: Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Delete account",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User Delete",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Error: User Doesn't Exist",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/updatepassword": {
+            "post": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "User password by providing old and new password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "User Passsword",
+                "parameters": [
+                    {
+                        "description": "New password Resuest",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schemas.ChangePasswordInput"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password Changed successfully",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.Success"
+                        }
+                    },
+                    "400": {
+                        "description": "Errror: Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "409": {
+                        "description": "Errror: Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "bearerToken": []
+                    }
+                ],
+                "description": "Get a particular User",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "GetAUser",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Path Parameters",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.NormalUserOUt"
+                        }
+                    },
+                    "400": {
+                        "description": "Error: Invalid id",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "401": {
+                        "description": "Error: Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    },
+                    "404": {
+                        "description": "Error: Not an admin or no user with the specified id",
+                        "schema": {
+                            "$ref": "#/definitions/schemas.OutputMessage"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Product": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2023-09-02"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "img_url": {
+                    "type": "string",
+                    "example": "img.jpeg"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 240.43
+                },
+                "productname": {
+                    "type": "string",
+                    "example": "Bag"
+                },
+                "quanity": {
+                    "type": "integer",
+                    "example": 20
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2023-09-02"
+                },
+                "userID": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "model.User": {
+            "type": "object",
+            "properties": {
+                "Email": {
+                    "type": "string",
+                    "example": "lawal@gmail.com"
+                },
+                "Firstname": {
+                    "type": "string",
+                    "example": "lawal"
+                },
+                "Isadmin": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "Lastname": {
+                    "type": "string",
+                    "example": "Afeez"
+                },
+                "Username": {
+                    "type": "string",
+                    "example": "kunlay"
+                },
+                "createdAt": {
+                    "type": "string",
+                    "example": "2023-09-02"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Product"
+                    }
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2023-09-02"
+                }
+            }
+        },
+        "schemas.AdminResponse": {
+            "type": "object",
+            "properties": {
+                "admin": {
+                    "$ref": "#/definitions/model.User"
+                }
+            }
+        },
+        "schemas.AdminsResponse": {
+            "type": "object",
+            "properties": {
+                "admins": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.User"
+                    }
+                }
+            }
+        },
+        "schemas.ChangePasswordInput": {
+            "type": "object",
+            "required": [
+                "NewPassword",
+                "OldPassword"
+            ],
+            "properties": {
+                "NewPassword": {
+                    "type": "string",
+                    "example": "Newpasssword"
+                },
+                "OldPassword": {
+                    "type": "string",
+                    "example": "Oldpasssword"
+                }
+            }
+        },
+        "schemas.LoginInput": {
+            "type": "object",
+            "required": [
+                "Email",
+                "Password"
+            ],
+            "properties": {
+                "Email": {
+                    "type": "string",
+                    "example": "lawalafeez820@gmail.com"
+                },
+                "Password": {
+                    "type": "string",
+                    "example": "password"
+                }
+            }
+        },
+        "schemas.NormalUser": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string",
+                    "example": "2020-09-02"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "lawal@gmail.com"
+                },
+                "firstName": {
+                    "type": "string",
+                    "example": "lawal"
+                },
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "isAdmin": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "lastName": {
+                    "type": "string",
+                    "example": "Afeez"
+                },
+                "updatedAt": {
+                    "type": "string",
+                    "example": "2020-09-02"
+                },
+                "userName": {
+                    "type": "string",
+                    "example": "Afeez"
+                }
+            }
+        },
+        "schemas.NormalUserOUt": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/schemas.NormalUser"
+                }
+            }
+        },
+        "schemas.NormalUsersOUt": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schemas.NormalUser"
+                    }
+                }
+            }
+        },
+        "schemas.OutputMessage": {
+            "type": "object",
+            "properties": {
+                "errorMessage": {
+                    "type": "string",
+                    "example": "Error"
+                }
+            }
+        },
+        "schemas.ProductInput": {
+            "type": "object",
+            "properties": {
+                "img_url": {
+                    "type": "string",
+                    "example": "img.jpeg"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 240.43
+                },
+                "productname": {
+                    "type": "string",
+                    "example": "Bag"
+                },
+                "quanity": {
+                    "type": "integer",
+                    "example": 20
+                }
+            }
+        },
+        "schemas.RegisterInput": {
+            "type": "object",
+            "required": [
+                "ConfirmPassword",
+                "Email",
+                "Firstname",
+                "Lastname",
+                "Password",
+                "Username"
+            ],
+            "properties": {
+                "ConfirmPassword": {
+                    "type": "string",
+                    "example": "secret"
+                },
+                "Email": {
+                    "type": "string",
+                    "example": "Lawal@gmail.com"
+                },
+                "Firstname": {
+                    "type": "string",
+                    "example": "Afeez"
+                },
+                "Lastname": {
+                    "type": "string",
+                    "example": "Lawal"
+                },
+                "Password": {
+                    "type": "string",
+                    "example": "secret"
+                },
+                "Username": {
+                    "type": "string",
+                    "example": "kunlsy03"
+                }
+            }
+        },
+        "schemas.ResponseProduct": {
+            "type": "object",
+            "properties": {
+                "product": {
+                    "$ref": "#/definitions/model.Product"
+                }
+            }
+        },
+        "schemas.Success": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "example": "Hello"
+                }
+            }
+        },
+        "schemas.TokenType": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string",
+                    "example": "fhejklm;lvjk"
+                }
+            }
+        },
+        "schemas.UpdateProduct": {
+            "type": "object",
+            "properties": {
+                "img_url": {
+                    "type": "string",
+                    "example": "img.jpeg"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 240.43
+                },
+                "productname": {
+                    "type": "string",
+                    "example": "Bag"
+                },
+                "quanity": {
+                    "type": "integer",
+                    "example": 20
+                }
+            }
+        },
+        "schemas.UserUpdate": {
+            "type": "object",
+            "required": [
+                "Firstname",
+                "Lastname"
+            ],
+            "properties": {
+                "Firstname": {
+                    "type": "string",
+                    "example": "Afeez"
+                },
+                "Lastname": {
+                    "type": "string",
+                    "example": "Lawal"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "bearerToken": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

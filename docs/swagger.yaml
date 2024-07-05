@@ -1,0 +1,729 @@
+definitions:
+  model.Product:
+    properties:
+      createdAt:
+        example: "2023-09-02"
+        type: string
+      id:
+        example: 1
+        type: integer
+      img_url:
+        example: img.jpeg
+        type: string
+      price:
+        example: 240.43
+        type: number
+      productname:
+        example: Bag
+        type: string
+      quanity:
+        example: 20
+        type: integer
+      updatedAt:
+        example: "2023-09-02"
+        type: string
+      userID:
+        example: 1
+        type: integer
+    type: object
+  model.User:
+    properties:
+      Email:
+        example: lawal@gmail.com
+        type: string
+      Firstname:
+        example: lawal
+        type: string
+      Isadmin:
+        example: false
+        type: boolean
+      Lastname:
+        example: Afeez
+        type: string
+      Username:
+        example: kunlay
+        type: string
+      createdAt:
+        example: "2023-09-02"
+        type: string
+      id:
+        type: integer
+      products:
+        items:
+          $ref: '#/definitions/model.Product'
+        type: array
+      updatedAt:
+        example: "2023-09-02"
+        type: string
+    type: object
+  schemas.AdminResponse:
+    properties:
+      admin:
+        $ref: '#/definitions/model.User'
+    type: object
+  schemas.AdminsResponse:
+    properties:
+      admins:
+        items:
+          $ref: '#/definitions/model.User'
+        type: array
+    type: object
+  schemas.ChangePasswordInput:
+    properties:
+      NewPassword:
+        example: Newpasssword
+        type: string
+      OldPassword:
+        example: Oldpasssword
+        type: string
+    required:
+    - NewPassword
+    - OldPassword
+    type: object
+  schemas.LoginInput:
+    properties:
+      Email:
+        example: lawalafeez820@gmail.com
+        type: string
+      Password:
+        example: password
+        type: string
+    required:
+    - Email
+    - Password
+    type: object
+  schemas.NormalUser:
+    properties:
+      createdAt:
+        example: "2020-09-02"
+        type: string
+      email:
+        example: lawal@gmail.com
+        type: string
+      firstName:
+        example: lawal
+        type: string
+      id:
+        example: 1
+        type: integer
+      isAdmin:
+        example: false
+        type: boolean
+      lastName:
+        example: Afeez
+        type: string
+      updatedAt:
+        example: "2020-09-02"
+        type: string
+      userName:
+        example: Afeez
+        type: string
+    type: object
+  schemas.NormalUserOUt:
+    properties:
+      user:
+        $ref: '#/definitions/schemas.NormalUser'
+    type: object
+  schemas.NormalUsersOUt:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/schemas.NormalUser'
+        type: array
+    type: object
+  schemas.OutputMessage:
+    properties:
+      errorMessage:
+        example: Error
+        type: string
+    type: object
+  schemas.ProductInput:
+    properties:
+      img_url:
+        example: img.jpeg
+        type: string
+      price:
+        example: 240.43
+        type: number
+      productname:
+        example: Bag
+        type: string
+      quanity:
+        example: 20
+        type: integer
+    type: object
+  schemas.RegisterInput:
+    properties:
+      ConfirmPassword:
+        example: secret
+        type: string
+      Email:
+        example: Lawal@gmail.com
+        type: string
+      Firstname:
+        example: Afeez
+        type: string
+      Lastname:
+        example: Lawal
+        type: string
+      Password:
+        example: secret
+        type: string
+      Username:
+        example: kunlsy03
+        type: string
+    required:
+    - ConfirmPassword
+    - Email
+    - Firstname
+    - Lastname
+    - Password
+    - Username
+    type: object
+  schemas.ResponseProduct:
+    properties:
+      product:
+        $ref: '#/definitions/model.Product'
+    type: object
+  schemas.Success:
+    properties:
+      message:
+        example: Hello
+        type: string
+    type: object
+  schemas.TokenType:
+    properties:
+      token:
+        example: fhejklm;lvjk
+        type: string
+    type: object
+  schemas.UpdateProduct:
+    properties:
+      img_url:
+        example: img.jpeg
+        type: string
+      price:
+        example: 240.43
+        type: number
+      productname:
+        example: Bag
+        type: string
+      quanity:
+        example: 20
+        type: integer
+    type: object
+  schemas.UserUpdate:
+    properties:
+      Firstname:
+        example: Afeez
+        type: string
+      Lastname:
+        example: Lawal
+        type: string
+    required:
+    - Firstname
+    - Lastname
+    type: object
+info:
+  contact:
+    email: lawalafeez820@gmail.com
+  description: An E-commerce app with gin framework
+  title: Golang gin for E-commerce
+  version: "1.0"
+paths:
+  /:
+    get:
+      description: Greet
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Welcome page
+      tags:
+      - Default
+  /admin/:
+    get:
+      description: Get all employee
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful
+          schema:
+            $ref: '#/definitions/schemas.AdminsResponse'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "404":
+          description: 'Error: No admin yet'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "500":
+          description: 'Error: Internal Server Error'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: GetAllAdmin
+      tags:
+      - Admin
+  /admin/{id}:
+    get:
+      description: Get a particular employee
+      parameters:
+      - description: Path Parameters
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful
+          schema:
+            $ref: '#/definitions/schemas.AdminResponse'
+        "400":
+          description: 'Error: Invalid id'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "404":
+          description: 'Error: Not an admin or no user with the specified id'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: GetAnAdmin
+      tags:
+      - Admin
+  /admin/add:
+    get:
+      description: Add new employee
+      parameters:
+      - description: Query Parameters
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful
+          schema:
+            $ref: '#/definitions/schemas.Success'
+        "400":
+          description: 'Error: Bad Request'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "404":
+          description: 'Error: Email not exit'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "409":
+          description: 'Error: Invalid email format'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: MakeUserAdmin
+      tags:
+      - Admin
+  /admin/remove:
+    get:
+      description: Remove employee
+      parameters:
+      - description: Query Parameters
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful
+          schema:
+            $ref: '#/definitions/schemas.Success'
+        "400":
+          description: 'Error: Invalid email format'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "404":
+          description: 'Error: Email not exit'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: RemoveAsAdmin
+      tags:
+      - Admin
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login user with email and password
+      parameters:
+      - description: Login Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.LoginInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token
+          schema:
+            $ref: '#/definitions/schemas.TokenType'
+        "400":
+          description: 'Error: Bad Request'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "409":
+          description: 'Errror: Conflict'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      summary: Login user
+      tags:
+      - Auth
+  /product:
+    get:
+      description: Get all Product
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful
+          schema:
+            $ref: '#/definitions/schemas.AdminsResponse'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "404":
+          description: 'Error: No Product yet'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "500":
+          description: 'Error: Internal Server Error'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: GetAllProduct
+      tags:
+      - Product
+    post:
+      consumes:
+      - application/json
+      description: Create New Poduct
+      parameters:
+      - description: ProductResuest
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.ProductInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/schemas.Success'
+        "400":
+          description: 'Errror: Bad Request'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "500":
+          description: 'Error: Internal Server Error'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: Create Poduct
+      tags:
+      - Product
+  /product/{id}:
+    delete:
+      description: Delete Product
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "404":
+          description: 'Error: User Doesn''t Exist'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: DeleteProduct
+      tags:
+      - Product
+    get:
+      description: Get a particular product
+      parameters:
+      - description: Path Parameters
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful
+          schema:
+            $ref: '#/definitions/schemas.AdminResponse'
+        "400":
+          description: 'Error: Invalid id'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "404":
+          description: 'Error: Not an admin or no user with the specified id'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: GetProduct
+      tags:
+      - Product
+    put:
+      description: Update a particular product
+      parameters:
+      - description: Update Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.UpdateProduct'
+      - description: Path Parameters
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful
+          schema:
+            $ref: '#/definitions/schemas.ResponseProduct'
+        "400":
+          description: 'Error: Invalid id'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "404":
+          description: 'Error: Not an admin or no user with the specified id'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: UpdateProduct
+      tags:
+      - Product
+  /user:
+    delete:
+      description: Delete account
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: 'Error: User Doesn''t Exist'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: User Delete
+      tags:
+      - User
+    get:
+      description: Get all User
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful
+          schema:
+            $ref: '#/definitions/schemas.NormalUsersOUt'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "404":
+          description: 'Error: No User yet'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "500":
+          description: 'Error: Internal Server Error'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: GetAllAll
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      parameters:
+      - description: Registration Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.RegisterInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User registered successfully
+          schema:
+            $ref: '#/definitions/schemas.Success'
+        "400":
+          description: 'Errror: Bad Request'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "409":
+          description: 'Errror: Conflict'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      summary: Register a new user
+      tags:
+      - User
+    put:
+      description: User update his/her account
+      parameters:
+      - description: Update Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.UserUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful
+          schema:
+            $ref: '#/definitions/schemas.NormalUserOUt'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: UpdateUser
+      tags:
+      - User
+  /user/{id}:
+    get:
+      description: Get a particular User
+      parameters:
+      - description: Path Parameters
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful
+          schema:
+            $ref: '#/definitions/schemas.NormalUserOUt'
+        "400":
+          description: 'Error: Invalid id'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "401":
+          description: 'Error: Unauthorized'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "404":
+          description: 'Error: Not an admin or no user with the specified id'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: GetAUser
+      tags:
+      - User
+  /user/updatepassword:
+    post:
+      consumes:
+      - application/json
+      description: User password by providing old and new password
+      parameters:
+      - description: New password Resuest
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.ChangePasswordInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password Changed successfully
+          schema:
+            $ref: '#/definitions/schemas.Success'
+        "400":
+          description: 'Errror: Bad Request'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+        "409":
+          description: 'Errror: Conflict'
+          schema:
+            $ref: '#/definitions/schemas.OutputMessage'
+      security:
+      - bearerToken: []
+      summary: User Passsword
+      tags:
+      - User
+securityDefinitions:
+  bearerToken:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

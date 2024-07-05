@@ -49,3 +49,11 @@ func (r *RegisterInput) ValidateEmail() bool {
 	re := regexp.MustCompile(Pattern)
 	return re.MatchString(r.Email)
 }
+
+type OutputMessage struct {
+	ErrorMessage string `example:"Error"`
+}
+
+type Success struct {
+	Message string `example:"Hello"`
+}
