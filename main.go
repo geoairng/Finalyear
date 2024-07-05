@@ -1,9 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"log"
+
+	"github.com/geoairng/Finalyear/startup"
 )
 
+// @title           Golang gin for E-commerce
+// @version         1.0
+// @description     An E-commerce app with gin framework
+// @contact.email  lawalafeez820@gmail.com
+// @securityDefinitions.apikey bearerToken
+// @in header
+// @name Authorization
+// @tokenUrl http://localhost:8080/login
+
 func main() {
-	fmt.Println("Hello, Finalyear!")
+
+	router := startup.StartApp()
+
+	log.Fatal(router.Run())
+
 }
